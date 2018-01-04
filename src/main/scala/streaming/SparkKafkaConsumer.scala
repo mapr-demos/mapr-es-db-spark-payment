@@ -59,14 +59,14 @@ object SparkKafkaConsumer {
     var topicc: String = "/mapr/maprdemo.mapr.io/apps/paystream:payments"
 
     if (args.length == 2) {
-      tableName = args(0)
-      topicc = args(1)
+      topicc = args(0)
+      tableName = args(1)
     } else {
       System.out.println("Using hard coded parameters unless you specify the consume topic and table. <topic table>   ")
     }
 
     val groupId = "testgroup"
-    val offsetReset = "earliest"  //  "latest"
+    val offsetReset = "earliest" //  "latest"
     val pollTimeout = "5000"
 
     val brokers = "maprdemo:9092" // not needed for MapR Streams, needed for Kafka

@@ -23,10 +23,10 @@ public class MsgProducer {
         String fileName = "./data/payments.csv";
 
         if (args.length == 2) {
-            topic = args[0];
-            fileName = args[1];
+            fileName = args[0];
+            topic = args[1];
         } else {
-            System.out.println("Using hard coded parameters unless you specify the file and topic. <file topic>   ");
+            System.out.println("Using hard coded parameters unless you specify the topic and file <file topic>   ");
         }
         System.out.println("Sending to topic " + topic);
         configureProducer();

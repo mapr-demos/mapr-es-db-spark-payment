@@ -71,9 +71,14 @@ object QueryPayment {
     pdf.createOrReplaceTempView("payments")
     //Top 5 nature of payment by total amount
     println("Top 5 nature of payment by total amount")
-    spark.sql("select Nature_of_payment,  sum(amount) as total from payments group by Nature_of_payment order by total desc limit 5").show
+    spark.sql("select Nature_of_payment,  sum(bround(amount)) as total from payments group by Nature_of_payment order by total desc limit 5").show
     println("Top 5 Physician Specialties by Amount with count")
-    spark.sql("select physician_specialty, count(*) as cnt, sum(amount) as total from payments where physician_specialty IS NOT NULL group by physician_specialty order by total desc limit 5").show
+    spark.sql("select physician_specialty, count(*) as cnt, sum(bround(amount)) as total from payments where physician_specialty IS NOT NULL group by physician_specialty order by total desc limit 5").show
+
+    //Top 5 Physician Specialties by total Amount
+    println("Top 5 Physician Specialties by Amount")
+    spark.sql("select physician_specialty, sum(bround(amount)) as total from payments where physician_specialty IS NOT NULL group by physician_specialty order by total desc limit 5").show(false)
+
   }
 }
 
