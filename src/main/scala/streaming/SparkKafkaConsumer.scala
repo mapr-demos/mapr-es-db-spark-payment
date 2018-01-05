@@ -21,11 +21,13 @@ import org.apache.spark.streaming.kafka09.{ ConsumerStrategies, KafkaUtils, Loca
 import scala.util.Try
 
 /*
-
+Spark streaming consumer 
+consumes from MapR Event Streams transforms CSV to JSON and write to MapR-DB JSON
 */
 object SparkKafkaConsumer {
 
   /*
+   *position of values in csv
 5 Physician_Profile_ID as physician_id, 
 31 Date_of_Payment as date_payment, 
 45 Record_ID as record_id, 

@@ -47,7 +47,7 @@ object QueryPayment {
     } else {
       System.out.println("Using hard coded parameters unless you specify the tablename ")
     }
-    val spark: SparkSession = SparkSession.builder().appName("uber").master("local[*]").getOrCreate()
+    val spark: SparkSession = SparkSession.builder().appName("querypayment").master("local[*]").getOrCreate()
 
     spark.sparkContext.setLogLevel("OFF")
     Logger.getLogger("org").setLevel(Level.OFF)
@@ -67,6 +67,12 @@ object QueryPayment {
     println("What are the Nature of Payments with payments > $1000 with count")
     pdf.filter($"amount" > 1000).groupBy("Nature_of_payment").count().orderBy(desc("count")).show()
 
+    println("What are the  payments for physician id 98485")
+    pdf.filter($"_id".like("98485%")).select($"_id", $"physician_specialty", $"amount").show(false)
+
+    println("What are the  payments for the month of february")
+    pdf.filter($"_id".like("%_02/%")).select($"_id", $"physician_specialty", $"amount").show(false)
+
     // Create a temporary view in order to use SQL for queries
     pdf.createOrReplaceTempView("payments")
     //Top 5 nature of payment by total amount
@@ -79,6 +85,13 @@ object QueryPayment {
     println("Top 5 Physician Specialties by Amount")
     spark.sql("select physician_specialty, sum(bround(amount)) as total from payments where physician_specialty IS NOT NULL group by physician_specialty order by total desc limit 5").show(false)
 
+    //find payments for physician id 98485
+    println("find payments for physician id 98485")
+    spark.sql("select _id, physician_id, amount from payments where _id like '98485%'").show(false)
+
+    //find payments for february
+    println("find payments for february")
+    spark.sql("select _id, physician_id, amount from payments where _id like '%_02/%'").show(false)
   }
 }
 

@@ -1,18 +1,8 @@
 
 /*
- Payment("132655","United States",,"100000000326","CA","Allopathic & Osteopathic Physicians|Radiology|Diagnostic Radiology","1")
-5Physician_Profile_ID as physician_id, 
-31Date_of_Payment as date_payment, 
-45Record_ID as record_id, 
-27Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_Name as payer,  
-30amount, 
-19Physician_Specialty, 
-34Nature_of_Payment_or_Transfer_of_Value as Nature_of_payment 
-* 
-("0NEW","1Covered Recipient Physician",2,3,4,5"132655",6"GREGG",7"D",8"ALZATE",9,10"8745 AERO DRIVE",11"STE 200",12"SAN DIEGO",13"CA",14"92123",
-15"United States",16,17,18"Medical Doctor",
-19"Allopathic & Osteopathic Physicians|Radiology|Diagnostic Radiology",
-20"CA",21,22,23,24,25"DFINE, Inc",26"100000000326",27"DFINE, Inc",28"CA",29"United States",90.87,"02/12/2016","1","In-kind items and services","Food and Beverage",,,,"No","No Third Party Payment",,,,,"No","346039438","No","Yes","Covered","Device","Radiology","StabiliT",,"Covered","Device","Radiology","STAR Tumor Ablation System",,,,,,,,,,,,,,,,,"2016","06/30/2017")
+
+*
+CSV header with positions
 0Change_Type,
 1Covered_Recipient_Type,
 2Teaching_Hospital_CCN,
@@ -90,4 +80,26 @@
 69Associated_Drug_or_Biological_NDC_5,
 70Program_Year,
 71Payment_Publication_Date
+
+example csv values with numbers
+
+("0NEW","1Covered Recipient Physician",2,3,4,5"132655",6"GREGG",7"D",8"ALZATE",9,10"8745 AERO DRIVE",11"STE 200",12"SAN DIEGO",13"CA",14"92123",
+15"United States",16,17,18"Medical Doctor",
+19"Allopathic & Osteopathic Physicians|Radiology|Diagnostic Radiology",
+20"CA",21,22,23,24,25"DFINE, Inc",26"100000000326",27"DFINE, Inc",28"CA",29"United States",90.87,"02/12/2016","1","In-kind items and services","Food and Beverage",,,,"No","No Third Party Payment",,,,,"No","346039438","No","Yes","Covered","Device","Radiology","StabiliT",,"Covered","Device","Radiology","STAR Tumor Ablation System",,,,,,,,,,,,,,,,,"2016","06/30/2017")
+
+example payment
+
+ Payment("132655","United States",,"100000000326","CA","Allopathic & Osteopathic Physicians|Radiology|Diagnostic Radiology","1")
+*
+5Physician_Profile_ID as physician_id, 
+31Date_of_Payment as date_payment, 
+45Record_ID as record_id, 
+27Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_Name as payer,  
+30amount, 
+19Physician_Specialty, 
+34Nature_of_Payment_or_Transfer_of_Value as Nature_of_payment 
+* 
+
+
 */

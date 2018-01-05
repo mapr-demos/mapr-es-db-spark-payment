@@ -11,6 +11,11 @@ import com.mapr.db.spark._
 import com.mapr.db.spark.impl._
 import com.mapr.db.spark.sql._
 
+/*
+Spark ETL 
+reads a CSV file. transforms CSV to JSON and writes to MapR-DB JSON
+*/
+
 object ETLPayment {
 
   case class Payment(physician_id: String, date_payment: String, record_id: String, payer: String, amount: Double, physician_specialty: String, nature_of_payment: String) extends Serializable

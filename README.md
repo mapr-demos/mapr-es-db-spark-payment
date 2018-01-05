@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This example will show you how to work with MapR-ES, Spark Streaming, and MapR-DB JSON using:
+This example will show you how to work with MapR-ES, Spark Streaming, and MapR-DB JSON :
 
 * Publish using the Kafka API  Medicare Open payments data from a CSV file into MapR-ES 
 * Consume and transform the streaming data with Spark Streaming and the Kafka API.
@@ -22,10 +22,6 @@ This example will show you how to work with MapR-ES, Spark Streaming, and MapR-D
 MapR Container For Developers is a docker image that enables you to quickly deploy a MapR environment on your developer machine.
 
 Installation, Setup and further information can be found [**here**](https://maprdocs.mapr.com/home/MapRContainerDevelopers/MapRContainerDevelopersOverview.html).
-
-
-#Publish using the Kafka API  Medicare Open payments data from a CSV file into MapR-ES 
-
 
 #### 1. Create MapR-ES Stream, Topic, and MapR-DB table 
 
@@ -77,7 +73,7 @@ You can wait for the java client to finish, or from a separate mac terminal you 
 or you can run from your IDE :
 
 ```
-$ java -cp ./target/mapr-es-db-spark-payment-1.0.jar:./target/* streaming.SparkKafkaConsumer
+$ java -cp ./target/mapr-es-db-spark-payment-1.0-jar-with-dependencies.jar:./target/* streaming.SparkKafkaConsumer
 ```
 This spark streaming client will consume from the topic /apps/paystream:payments and write to the table /apps/payments.
 You can optionally pass the topic and table as input parameters <topic table> 
@@ -125,7 +121,9 @@ $ java -cp ./target/mapr-es-db-spark-payment-1.0.jar:./target/* maprdb.OJAI_Simp
 Refer to [**connecting clients **](https://maprdocs.mapr.com/home/MapRContainerDevelopers/ConnectingClients.html) for 
 information on setting up the Drill client
 
-## MapR DB Shell
+**Use MapR DB Shell to Query the Payments table**
+
+In this section you will  use the DB shell to query the Payments JSON table
 
 To access MapR-DB from your mac client or logged into the container, you can use MapR-DB shell:
 
@@ -134,30 +132,47 @@ $ /opt/mapr/bin/mapr dbshell
 
 To learn more about the various commands, run `help`' or  `help <command>` , for example `help insert`.
 
-**1. Retrieve one document using its id**
+
 
 maprdb mapr:> jsonoptions --pretty true --withtags false
 
+**find 5 documents**
+```
+maprdb mapr:> find /apps/payments --limit 5
+```
+Note that queries by _id will be faster because _id is the primary index
 
+**Query document with Condition _id starts with 98485 (physician id)**
 ```
-maprdb mapr:> find /apps/user --id l52TR2e4p9K4Z9zezyGKfg
+maprdb mapr:> find /apps/payments --where '{ "$like" : {"_id":"98485%"} }' --f _id,amount
+```
+**Query document with Condition _id has february **
+```
+find /apps/payments --where '{ "$like" : {"_id":"%_02/%"} }' --f _id,amount
 ```
 
-**4. Query document with Condition**
-```
-maprdb mapr:> find /apps/user --where '{ "$eq" : {"support":"gold"} }' --f _id,name,support
-```
-
-## Drill Shell
+**Use Drill Shell to query MapR-DB**
 
 From your mac terminal connect to Drill as user mapr through JDBC by running sqlline:
 /opt/mapr/drill/drill-1.11.0/bin/sqlline -u "jdbc:drill:drillbit=localhost" -n mapr
 
+**Query document with Condition _id has february **
+
+** Who are top 5 Physician Ids by Amount**
 ```
 0: jdbc:drill:drillbit=localhost> select physician_id, sum(amount) as revenue from dfs.`/apps/payments` group by physician_id order by revenue desc limit 5;
 ```
+** What are top 5 nature of payments by Amount**
 ```
 0: jdbc:drill:drillbit=localhost> select nature_of_payment,  sum(amount) as total from dfs.`/apps/payments` group by nature_of_payment order by total desc limit 5;
+```
+**Query for payments for physician id  **
+```
+0: jdbc:drill:drillbit=localhost> select _id,  amount from dfs.`/apps/payments` where _id like '98485%';
+```
+**Query for payments in february **
+```
+0: jdbc:drill:drillbit=localhost> select _id,  amount from dfs.`/apps/payments` where _id like '%[_]02/%';
 ```
 
 ## Conclusion

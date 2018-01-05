@@ -13,7 +13,6 @@ public class DRILL_SimpleQuery {
 
     public static String JDBC_DRIVER = "org.apache.drill.jdbc.Driver";
 
-
     /**
      * Can specify connection URL in 2 ways. 1. Connect to Zookeeper -
      * "jdbc:drill:zk=<hostname/host-ip>:5181/drill/<cluster-name>-drillbits" 2.
@@ -37,8 +36,8 @@ public class DRILL_SimpleQuery {
             Connection connection = DriverManager.getConnection(DRILL_JDBC_URL, "mapr", "");
 
             Statement statement = connection.createStatement();
-            
-            final String sql = "select physician_specialty,sum(amount) as total from dfs.`" + tableName + "` group by physician_specialty order by total desc";
+            System.out.println("Top 10 physician specialties by total payments");
+            final String sql = "select physician_specialty,sum(amount) as total from dfs.`" + tableName + "` group by physician_specialty order by total desc limit 10";
             System.out.println("Query: " + sql);
 
             ResultSet result = statement.executeQuery(sql);

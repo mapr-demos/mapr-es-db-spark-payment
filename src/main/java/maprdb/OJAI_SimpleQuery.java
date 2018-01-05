@@ -10,6 +10,10 @@ import org.ojai.store.QueryCondition;
 
 //import java.util.UUID;
 
+/*
+ Java OJAI 
+ Querys Payments table in MapR-DB JSON
+ */
 public class OJAI_SimpleQuery {
 
     public static final String OJAI_CONNECTION_URL = "ojai:mapr:";
@@ -30,9 +34,9 @@ public class OJAI_SimpleQuery {
         Connection connection = DriverManager.getConnection(OJAI_CONNECTION_URL);
         // Get an instance of OJAI
         DocumentStore store = connection.getStore(tableName);
-
+        System.out.println("find payments > $10,000");
         Query query = connection.newQuery()
-                .select("physician_id", "physician_specialty", "amount") // projection
+                .select("_id", "nature_of_payment", "amount") // projection
                 .where(connection.newCondition().is("amount", QueryCondition.Op.GREATER_OR_EQUAL, 10000).build()) // condition
                 .build();
 
@@ -45,6 +49,25 @@ public class OJAI_SimpleQuery {
             counter++;
         }
         long endTime = System.currentTimeMillis();
+
+        System.out.println(String.format("\t %d found in %d ms", counter, (endTime - startTime)));
+
+        System.out.println("find payments for february");
+
+        query = connection.newQuery()
+                .select("_id", "nature_of_payment", "amount") // projection
+                .where(connection.newCondition().like("_id", "%[_]02/%").build()) // condition
+                .build();
+
+        startTime = System.currentTimeMillis();
+        counter = 0;
+        stream = store.findQuery(query);
+        for (Document userDocument : stream) {
+            // Print the OJAI Document
+            System.out.println("\t" + userDocument.asJsonString());
+            counter++;
+        }
+        endTime = System.currentTimeMillis();
 
         System.out.println(String.format("\t %d found in %d ms", counter, (endTime - startTime)));
 
