@@ -147,7 +147,7 @@ Note that queries by _id will be faster because _id is the primary index
 ```
 maprdb mapr:> find /apps/payments --where '{ "$like" : {"_id":"98485%"} }' --f _id,amount
 ```
-**Query document with Condition _id has february **
+**Query document with Condition _id has february**
 ```
 find /apps/payments --where '{ "$like" : {"_id":"%_02/%"} }' --f _id,amount
 ```
@@ -157,21 +157,21 @@ find /apps/payments --where '{ "$like" : {"_id":"%_02/%"} }' --f _id,amount
 From your mac terminal connect to Drill as user mapr through JDBC by running sqlline:
 /opt/mapr/drill/drill-1.11.0/bin/sqlline -u "jdbc:drill:drillbit=localhost" -n mapr
 
-**Query document with Condition _id has february **
+**Query document with Condition _id has february**
 
 ** Who are top 5 Physician Ids by Amount**
 ```
 0: jdbc:drill:drillbit=localhost> select physician_id, sum(amount) as revenue from dfs.`/apps/payments` group by physician_id order by revenue desc limit 5;
 ```
-** What are top 5 nature of payments by Amount**
+**What are top 5 nature of payments by Amount**
 ```
 0: jdbc:drill:drillbit=localhost> select nature_of_payment,  sum(amount) as total from dfs.`/apps/payments` group by nature_of_payment order by total desc limit 5;
 ```
-**Query for payments for physician id  **
+**Query for payments for physician id**
 ```
 0: jdbc:drill:drillbit=localhost> select _id,  amount from dfs.`/apps/payments` where _id like '98485%';
 ```
-**Query for payments in february **
+**Query for payments in february**
 ```
 0: jdbc:drill:drillbit=localhost> select _id,  amount from dfs.`/apps/payments` where _id like '%[_]02/%';
 ```
