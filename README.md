@@ -211,6 +211,14 @@ In Drill try
 0: jdbc:drill:drillbit=localhost> select  distinct(payer) from dfs.`/apps/payments` ;
 
 ```
+##Cleaning Up
+
+You can delete the topic and table using the following command from a container terminal:
+```
+maprcli stream topic delete -path /mapr/maprdemo.mapr.io/apps/paystream -topic payment
+maprcli table delete -path /mapr/maprdemo.mapr.io/apps/payments
+
+```
 ## Conclusion
 
 In this example you have learned how to:
@@ -221,6 +229,8 @@ In this example you have learned how to:
 * Query and Load the JSON data from the MapR-DB document database using the Spark-DB connector and Spark SQL 
 * Query the MapR-DB document database using Apache Drill 
 * Query the MapR-DB document database using Java and the OJAI library
+
+
 
 You can also look at the following examples:
 
