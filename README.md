@@ -151,6 +151,10 @@ maprdb mapr:> find /apps/payments --where '{ "$like" : {"_id":"98485%"} }' --f _
 ```
 find /apps/payments --where '{ "$like" : {"_id":"%_02/%"} }' --f _id,amount
 ```
+**find all payers=**
+```
+maprdb mapr:> find /apps/payments --where '{ "$eq" : {"payer":"Mission Pharmacal Company"} }' --f _id,payer,amount,nature_of_payment
+```
 
 **Use Drill Shell to query MapR-DB**
 
@@ -159,7 +163,7 @@ From your mac terminal connect to Drill as user mapr through JDBC by running sql
 
 **Query document with Condition _id has february**
 
-** Who are top 5 Physician Ids by Amount**
+**Who are top 5 Physician Ids by Amount**
 ```
 0: jdbc:drill:drillbit=localhost> select physician_id, sum(amount) as revenue from dfs.`/apps/payments` group by physician_id order by revenue desc limit 5;
 ```
@@ -176,14 +180,37 @@ From your mac terminal connect to Drill as user mapr through JDBC by running sql
 0: jdbc:drill:drillbit=localhost> select _id,  amount from dfs.`/apps/payments` where _id like '%[_]02/%';
 ```
 
+#### 6. Adding a secondary index to improve queries
+
+Let's now add indices to the user table.
+
+In a docker container terminal window:
+
+```
+$ maprcli table index add -path /apps/payments -index idx_payer -indexedfields 'payer:1'
+```
+In MapR-DB Shell, find all payers, and compare with previous query performance:
+```
+maprdb mapr:> find /apps/payments --where '{ "$eq" : {"payer":"Mission Pharmacal Company"} }' --f _id,payer,amount,nature_of_payment
+```
+In Drill try 
+```
+0: jdbc:drill:drillbit=localhost> select _id, amount, payer from dfs.`/apps/payments` where payer='CorMatrix Cardiovascular Inc.';
+
+0: jdbc:drill:drillbit=localhost> select _id, amount, payer from dfs.`/apps/payments` where payer like '%Dental%';
+
+0: jdbc:drill:drillbit=localhost> select  distinct(payer) from dfs.`/apps/payments` ;
+
+0: jdbc:drill:drillbit=localhost> select  distinct(payer) from dfs.`/apps/payments` ;
+```
 ## Conclusion
 
 In this example you have learned how to:
 
 * Publish using the Kafka API  Medicare Open payments data from a CSV file into MapR-ES 
-* Consume and transform the streaming data with Spark Streaming and the Kafka API.
+* Consume and transform the streaming data with Spark Streaming and the Kafka API
 * Transform the data into JSON format and save to the MapR-DB document database using the Spark-DB connector
-* Query and Load the JSON data from the MapR-DB document database using the Spark-DB connector and Spark SQL .
+* Query and Load the JSON data from the MapR-DB document database using the Spark-DB connector and Spark SQL 
 * Query the MapR-DB document database using Apache Drill 
 * Query the MapR-DB document database using Java and the OJAI library
 
