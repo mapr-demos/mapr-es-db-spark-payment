@@ -179,17 +179,26 @@ From your mac terminal connect to Drill as user mapr through JDBC by running sql
 ```
 0: jdbc:drill:drillbit=localhost> select _id,  amount from dfs.`/apps/payments` where _id like '%[_]02/%';
 ```
+**Queries on payer**
+```
+0: jdbc:drill:drillbit=localhost> select _id, amount, payer from dfs.`/apps/payments` where payer='CorMatrix Cardiovascular Inc.';
 
-#### 6. Adding a secondary index to improve queries
+0: jdbc:drill:drillbit=localhost> select _id, amount, payer from dfs.`/apps/payments` where payer like '%Dental%';
 
-Let's now add indices to the user table.
+0: jdbc:drill:drillbit=localhost> select  distinct(payer) from dfs.`/apps/payments` ;
+```
+
+
+#### 7. Adding a secondary index to improve queries
+
+Let's now add indices to the payments table.
 
 In a docker container terminal window:
 
 ```
 $ maprcli table index add -path /apps/payments -index idx_payer -indexedfields 'payer:1'
 ```
-In MapR-DB Shell, find all payers, and compare with previous query performance:
+In MapR-DB Shell, try queries on payments payers and compare with previous query performance:
 ```
 maprdb mapr:> find /apps/payments --where '{ "$eq" : {"payer":"Mission Pharmacal Company"} }' --f _id,payer,amount,nature_of_payment
 ```
@@ -201,7 +210,6 @@ In Drill try
 
 0: jdbc:drill:drillbit=localhost> select  distinct(payer) from dfs.`/apps/payments` ;
 
-0: jdbc:drill:drillbit=localhost> select  distinct(payer) from dfs.`/apps/payments` ;
 ```
 ## Conclusion
 
