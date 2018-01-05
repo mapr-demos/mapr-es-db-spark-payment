@@ -6,10 +6,10 @@ This example will show you how to work with MapR-ES, Spark Streaming, and MapR-D
 
 * Publish using the Kafka API  Medicare Open payments data from a CSV file into MapR-ES 
 * Consume and transform the streaming data with Spark Streaming and the Kafka API.
-* Transform the data into JSON format and save to the MapR-DB document database using the Spark-DB connector
-* Query and Load the JSON data from the MapR-DB document database using the Spark-DB connector and Spark SQL .
-* Query the MapR-DB document database using Apache Drill 
-* Query the MapR-DB document database using Java and the OJAI library
+* Transform the data into JSON format and save to the MapR-DB document database using the Spark-DB connector.
+* Query and Load the JSON data from the MapR-DB document database using the Spark-DB connector and Spark SQL.
+* Query the MapR-DB document database using Apache Drill. 
+* Query the MapR-DB document database using Java and the OJAI library.
 
 **Prerequisites**
 
@@ -19,24 +19,22 @@ This example will show you how to work with MapR-ES, Spark Streaming, and MapR-D
 
 ## Setting up MapR Container For Developers
 
-MapR Container For Developers is a docker image that enables you to quickly deploy a MapR environment on your developer machine.
+The MapR Container For Developers is a docker image that enables you to quickly deploy a MapR environment on your developer machine.
 
 Installation, Setup and further information can be found [**here**](https://maprdocs.mapr.com/home/MapRContainerDevelopers/MapRContainerDevelopersOverview.html).
 
 #### 1. Create MapR-ES Stream, Topic, and MapR-DB table 
 
 from your mac log in to the docker container:
-
-ssh root@maprdemo -p 2222
-
+```
+$ssh root@maprdemo -p 2222
+```
 In the docker container use the mapr command line interface to create streams and tables
 ```
-maprcli stream create -path /mapr/maprdemo.mapr.io/apps/paystream -produceperm p -consumeperm p -topicperm p
-maprcli stream topic create -path /mapr/maprdemo.mapr.io/apps/paystream -topic payments  
-```
- 
-```
-maprcli table create -path /mapr/maprdemo.mapr.io/apps/payments -tabletype json -defaultreadperm p -defaultwriteperm p
+$ maprcli stream create -path /mapr/maprdemo.mapr.io/apps/paystream -produceperm p -consumeperm p -topicperm p
+$ maprcli stream topic create -path /mapr/maprdemo.mapr.io/apps/paystream -topic payments  
+
+$ maprcli table create -path /mapr/maprdemo.mapr.io/apps/payments -tabletype json -defaultreadperm p -defaultwriteperm p
   
 ```
 
@@ -89,12 +87,15 @@ $ java -cp ./target/mapr-es-db-spark-payment-1.0.jar:./target/* sparkmaprdb.Quer
 
 optionally from your mac you can log in to the docker container:
 
-ssh root@maprdemo -p 2222
+```
+$ ssh root@maprdemo -p 2222
+```
 
 start the spark shell with this command
 
-/opt/mapr/spark/spark-2.1.0/bin/spark-shell --master local[2]
-
+```
+$ /opt/mapr/spark/spark-2.1.0/bin/spark-shell --master local[2]
+```
 copy paste  from the scripts/sparkshell file to query MapR-DB
 
 #### 4. Working with Drill-JDBC
@@ -108,7 +109,7 @@ $ java -cp ./target/mapr-es-db-spark-payment-1.0.jar:./target/* maprdb.DRILL_Sim
 
 #### 5. Working with OJAI
 
-OJAI the Java API used to access MapR-DB JSON, leverages the same query engine than MapR-DB Shell and Apache Drill. 
+OJAI the Java API used to access MapR-DB JSON, leverages the same query engine as MapR-DB Shell and Apache Drill. 
 
 From your mac in the mapr-es-db-spark-payment directory you can run the java client to query the MapR-DB table using OJAI
 or you can run from your IDE :
@@ -129,13 +130,13 @@ To access MapR-DB from your mac client or logged into the container, you can use
 
 ```
 $ /opt/mapr/bin/mapr dbshell
+```
 
-To learn more about the various commands, run `help`' or  `help <command>` , for example `help insert`.
+To learn more about the various commands, run help or help <command> , for example help insert.
 
-
-
-maprdb mapr:> jsonoptions --pretty true --withtags false
-
+```
+$ maprdb mapr:> jsonoptions --pretty true --withtags false
+```
 **find 5 documents**
 ```
 maprdb mapr:> find /apps/payments --limit 5
