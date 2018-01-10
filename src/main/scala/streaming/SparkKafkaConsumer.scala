@@ -102,23 +102,8 @@ object SparkKafkaConsumer {
 
     val pDStream: DStream[PaymentwId] = valuesDStream.map(parsePaymentwID)
 
-    pDStream.foreachRDD { (rdd: RDD[PaymentwId], time: Time) =>
-      // There exists at least one element in RDD
-      if (!rdd.isEmpty) {
-        val count = rdd.count
-        println("count received " + count)
-        val spark = SparkSession.builder.config(rdd.sparkContext.getConf).getOrCreate()
-        import spark.implicits._
-        val ds = spark.createDataset(rdd)
-        println("show 20 rows of dataset")
-        ds.show
-        ds.createOrReplaceTempView("payments")
-        println("top physician specialties by amount paid")
-        spark.sql("select physician_specialty, count(*) as cnt, sum(amount) as total from payments group by physician_specialty order by total desc").show()
-        ds.saveToMapRDB(tableName, createTable = false, idFieldPath = "_id")
-
-      }
-    }
+    pDStream.print(3)
+    pDStream.saveToMapRDB(tableName, createTable=false, bulkInsert=true, idFieldPath = "_id")
 
     ssc.start()
     ssc.awaitTermination()
